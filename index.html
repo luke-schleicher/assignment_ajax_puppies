@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+<body>
+  <div id="flash">Talking to the Puppy Shelter back-end...</div>
+  <h1>The AJAX Puppy Shelter</h1>
+
+  <label>
+    Name
+    <input type="text" name="name">
+  </label>
+  <label>
+    Breed
+    <select name="breed">
+      <option>Poodle</option>
+      <option>Rottweiler</option>
+      <option>Sheepdog</option>
+      <option>Chihuahua</option>
+      <option>Mutt</option>
+      <option>Boxer</option>
+      <option>Great Dane</option>
+    </select>
+  </label>
+  <button>Register Puppy</button>
+
+  <h2>Our puppies:</h2>
+  <a href="#" id="refresh">Refresh puppies list</a>
+  <ul id="puppy-list"></ul>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="jquery.timeago.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
