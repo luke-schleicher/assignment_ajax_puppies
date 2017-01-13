@@ -3,6 +3,7 @@
 var Puppies = (function() {
 
   var init = function() {
+    _fetchPuppies();
     _fetchBreeds();
     _refreshListener();
     _addPuppyListener();
@@ -19,6 +20,7 @@ var Puppies = (function() {
   };
 
   var _pupulateBreedsList = function _pupulateBreedsList(data) {
+    Puppies.breeds = data;
     for (var i = 0; i < data.length; i++) {
       $('<option>')
         .text(data[i].name)
@@ -27,12 +29,21 @@ var Puppies = (function() {
     }
   };
 
+  var _lookupBreed = function(id) {
+    for (var i = 0; i < Puppies.breeds.length; i++) {
+      if (Puppies.breeds[i].id === id) {
+        return Puppies.breeds[i].name;
+      }
+    }
+  };
+
   var _addPuppyListener = function() {
     $('#add-puppy').click(function(e) {
       e.preventDefault();
       var name = $('#name').val();
       var breedId = $('#breed option:selected').val();
-      console.log(name, breedId);
+      var breedName = $('#breed option:selected').text();
+      // console.log(name, breedId);
       $.ajax({
         url: 'https://ajax-puppies.herokuapp.com/puppies.json',
         method: "POST",
@@ -43,6 +54,9 @@ var Puppies = (function() {
         data: JSON.stringify({name: name, breed_id: breedId}),
         success: function(data) {
           $('#flash').text("Puppy added");
+          var puppy = data;
+          puppy.breed = { name: _lookupBreed(puppy.breed_id) };
+          _newPuppy(puppy);
         },
         error: function(data) {
           $('#flash').text("Puppy not added");
@@ -60,32 +74,39 @@ var Puppies = (function() {
 
       e.preventDefault();
 
-      $.ajax({
-        url: 'https://ajax-puppies.herokuapp.com/puppies.json',
-        method: "GET",
-        dataType: "json",
-        complete: function(xhr) {
-          console.log(xhr);
-        },
-        success: function(data) {
-          _pupulatePuppiesList(data);
-        }
-      });
+      _fetchPuppies();
     });
+  };
+
+  var _fetchPuppies = function fetchPuppies() {
+    $.ajax({
+      url: 'https://ajax-puppies.herokuapp.com/puppies.json',
+      method: "GET",
+      dataType: "json",
+      complete: function(xhr) {
+        console.log(xhr);
+      },
+      success: function(data) {
+        _pupulatePuppiesList(data);
+      }
+    });
+  };
+
+  var _newPuppy = function newPuppy(puppy) {
+    var $puppyName = $('<strong>').text(puppy.name);
+    var timeAgo = $.timeago(puppy.created_at);
+    var liText = ` (${puppy.breed.name}), created ${timeAgo} -- `;
+    var $adoptLink = $('<a>').text("adopt").attr('href', '#');
+    $('<li>')
+      .text(liText)
+      .prepend($puppyName)
+      .append($adoptLink)
+      .appendTo('#puppy-list');
   };
 
   var _pupulatePuppiesList = function(arrayOfPuppies) {
     for (var i = 0; i < arrayOfPuppies.length; i++) {
-      var puppy = arrayOfPuppies[i];
-      var $puppyName = $('<strong>').text(puppy.name);
-      var timeAgo = $.timeago(puppy.created_at);
-      var liText = ` (${puppy.breed.name}), created ${timeAgo} -- `;
-      var $adoptLink = $('<a>').text("adopt").attr('href', '#');
-      $('<li>')
-        .text(liText)
-        .prepend($puppyName)
-        .append($adoptLink)
-        .appendTo('#puppy-list');
+      _newPuppy(arrayOfPuppies[i]);
     }
   };
 
