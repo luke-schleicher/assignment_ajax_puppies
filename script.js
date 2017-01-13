@@ -59,7 +59,7 @@ var Puppies = (function() {
           _newPuppy(puppy);
         },
         error: function(data) {
-          $('#flash').text("Puppy not added");
+          $('#flash').text(data.statusText);
         },
         complete: function(xhr) {
           console.log(xhr);
