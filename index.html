@@ -11,23 +11,27 @@
   <div id="flash">Talking to the Puppy Shelter back-end...</div>
   <h1>The AJAX Puppy Shelter</h1>
 
-  <label>
-    Name
-    <input type="text" name="name">
-  </label>
-  <label>
-    Breed
-    <select name="breed">
-      <option>Poodle</option>
-      <option>Rottweiler</option>
-      <option>Sheepdog</option>
-      <option>Chihuahua</option>
-      <option>Mutt</option>
-      <option>Boxer</option>
-      <option>Great Dane</option>
-    </select>
-  </label>
-  <button>Register Puppy</button>
+  <form>
+
+    <label>
+      Name
+      <input type="text" name="name" id="name">
+    </label>
+    <label>
+      Breed
+      <select name="breed" id="breed">
+        <option>Poodle</option>
+        <option>Rottweiler</option>
+        <option>Sheepdog</option>
+        <option>Chihuahua</option>
+        <option>Mutt</option>
+        <option>Boxer</option>
+        <option>Great Dane</option>
+      </select>
+    </label>
+    <button id="add-puppy">Register Puppy</button>
+
+  </form>
 
   <h2>Our puppies:</h2>
   <a href="#" id="refresh">Refresh puppies list</a>
@@ -36,5 +40,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="jquery.timeago.js"></script>
   <script src="script.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      Puppies.init();
+    });
+  </script>
+
 </body>
 </html>
