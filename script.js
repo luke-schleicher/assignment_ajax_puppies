@@ -3,40 +3,58 @@
 var Puppies = (function() {
 
   var init = function() {
+    _fetchBreeds();
     _refreshListener();
     _addPuppyListener();
-  }
+  };
 
-  var _addPuppyListener = function(e) {
+  var _fetchBreeds = function _fetchBreeds() {
+    $.ajax({
+      url: 'https://ajax-puppies.herokuapp.com/breeds.json',
+      method: 'GET',
+      dataType: 'json',
+      success: _pupulateBreedsList,
+      complete: function(xhr) { console.log(xhr); }
+    });
+  };
 
-    e.preventDefault();
+  var _pupulateBreedsList = function _pupulateBreedsList(data) {
+    for (var i = 0; i < data.length; i++) {
+      $('<option>')
+        .text(data[i].name)
+        .attr('value', data[i].id)
+        .appendTo('#breed');
+    }
+  };
 
-    var name = $('#name').val();
-    var breed = $('#breed option:selected').val();
-
-    $.ajax(
-
+  var _addPuppyListener = function() {
+    $('#add-puppy').click(function(e) {
+      e.preventDefault();
+      var name = $('#name').val();
+      var breedId = $('#breed option:selected').val();
+      console.log(name, breedId);
+      $.ajax({
         url: 'https://ajax-puppies.herokuapp.com/puppies.json',
         method: "POST",
         dataType: 'json',
-        contentType: ,
+        contentType: 'application/json',
 
         // needs to be a string before it's sent
-        data: {},
-        complete: function(xhr) {
-
-        };
+        data: JSON.stringify({name: name, breed_id: breedId}),
         success: function(data) {
-
-        };
+          $('#flash').text("Puppy added");
+        },
         error: function(data) {
-
-        }
-
-      );
+          $('#flash').text("Puppy not added");
+        },
+        complete: function(xhr) {
+          console.log(xhr);
+        },
+      });
+    });
 
   };
- 
+
   var _refreshListener = function() {
     $('#refresh').click(function(e) {
 
@@ -50,13 +68,13 @@ var Puppies = (function() {
           console.log(xhr);
         },
         success: function(data) {
-          _populatePuppiesList(data);
+          _pupulatePuppiesList(data);
         }
       });
     });
-  }; 
+  };
 
-  var _populatePuppiesList = function(arrayOfPuppies) {
+  var _pupulatePuppiesList = function(arrayOfPuppies) {
     for (var i = 0; i < arrayOfPuppies.length; i++) {
       var puppy = arrayOfPuppies[i];
       var $puppyName = $('<strong>').text(puppy.name);
@@ -73,6 +91,6 @@ var Puppies = (function() {
 
   return {
     init: init,
-  } 
+  };
 
 })();
