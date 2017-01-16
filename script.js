@@ -64,10 +64,14 @@ var Puppies = (function($) {
       url: 'https://ajax-puppies.herokuapp.com/puppies.json',
       method: "POST",
       dataType: 'json',
-      contentType: 'application/json',
-      data: JSON.stringify({name: name, breed_id: breedId}),
 
+      contentType: "application/x-www-form-urlencoded",
+      // contentType: 'application/json',
+      // data: JSON.stringify({name: name, breed_id: breedId}),
+
+      data: {name: name, breed_id: breedId},
       success: _puppySuccessCallback,
+
       error: function(data) {
         $('#flash').text(data.statusText);
       },
